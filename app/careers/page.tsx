@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MapPin, Clock, Users, Briefcase, ChevronRight, Search } from "lucide-react"
+import JobApplicationModal from "@/components/job-application-modal"
 
 export default function CareersPage() {
   const [selectedDepartment, setSelectedDepartment] = useState("Semua")
   const [searchTerm, setSearchTerm] = useState("")
+  const [selectedJob, setSelectedJob] = useState<{ title: string; department: string } | null>(null)
+  const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false)
 
   const departments = ["Semua", "Engineering", "Design", "Marketing", "Sales", "HR"]
 
@@ -91,6 +94,11 @@ export default function CareersPage() {
       job.description.toLowerCase().includes(searchTerm.toLowerCase())
     return matchesDepartment && matchesSearch
   })
+
+  const handleApplyNow = (job: { title: string; department: string }) => {
+    setSelectedJob(job)
+    setIsApplicationModalOpen(true)
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -220,7 +228,10 @@ export default function CareersPage() {
                     <span className="text-sm text-muted-foreground font-[family-name:var(--font-lato)]">
                       Diposting {job.posted}
                     </span>
-                    <Button className="font-[family-name:var(--font-poppins)]">
+                    <Button
+                      onClick={() => handleApplyNow({ title: job.title, department: job.department })}
+                      className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 font-[family-name:var(--font-poppins)]"
+                    >
                       Lamar Sekarang
                       <ChevronRight className="w-4 h-4 ml-1" />
                     </Button>
@@ -305,6 +316,18 @@ export default function CareersPage() {
           </Button>
         </div>
       </section>
+
+      {selectedJob && (
+        <JobApplicationModal
+          isOpen={isApplicationModalOpen}
+          onClose={() => {
+            setIsApplicationModalOpen(false)
+            setSelectedJob(null)
+          }}
+          jobTitle={selectedJob.title}
+          department={selectedJob.department}
+        />
+      )}
     </div>
   )
 }
