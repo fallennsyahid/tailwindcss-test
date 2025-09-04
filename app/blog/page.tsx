@@ -3,6 +3,7 @@
 import { Calendar, User, ArrowRight } from "lucide-react"
 import Header from "@/components/header"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 interface BlogPost {
   id: number
@@ -113,10 +114,12 @@ function BlogCard({ post }: { post: BlogPost }) {
             <span>{post.author}</span>
           </div>
 
-          <Button variant="ghost" className="text-primary hover:text-primary/80 p-0 h-auto font-semibold">
-            Baca Selengkapnya
-            <ArrowRight className="w-4 h-4 ml-1" />
-          </Button>
+          <Link href={`/blog/${post.id}`}>
+            <Button variant="ghost" className="text-primary hover:text-primary/80 p-0 h-auto font-semibold">
+              Baca Selengkapnya
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
+          </Link>
         </div>
       </div>
     </article>
